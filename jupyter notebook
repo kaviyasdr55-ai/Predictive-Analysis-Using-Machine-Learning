@@ -1,0 +1,92 @@
+# Student Performance Prediction Using Machine Learning
+This project predicts whether a student will pass or fail based on
+study hours, attendance, and previous academic performance.import pandas as pd
+
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Creating a simple student dataset
+data = {
+    'Study_Hours': [1, 2, 3, 4, 5, 6, 7, 8],
+    'Attendance': [60, 65, 70, 75, 80, 85, 90, 95],
+    'Previous_Score': [40, 45, 50, 55, 65, 70, 80, 90],
+    'Result': [0, 0, 0, 0, 1, 1, 1, 1]  # 0 = Fail, 1 = Pass
+}
+
+df = pd.DataFrame(data)
+df
+
+## Dataset Description
+- Study_Hours: Number of hours a student studies per day
+- Attendance: Attendance percentage
+- Previous_Score: Marks obtained in previous exams
+- Result: 0 indicates Fail, 1 indicates Pass
+
+# Selecting features (X) and target (y)
+X = df[['Study_Hours', 'Attendance', 'Previous_Score']]
+y = df['Result']
+X, y
+
+ ## Feature Selection
+The input features selected for training the model are:
+- Study_Hours
+- Attendance
+- Previous_Score
+The target variable is Result, which indicates Pass or Fail.
+
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+X_train.shape, X_test.shape
+
+## Train-Test Split
+The dataset is split into training and testing sets.
+- 80% of the data is used for training
+- 20% of the data is used for testing
+
+from sklearn.linear_model import LogisticRegression
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+## Model Training
+Logistic Regression is used as the classification algorithm to predict
+whether a student will pass or fail based on the selected features.
+The model is trained using the training dataset.
+
+# Making predictions on test data
+y_pred = model.predict(X_test)
+y_pred
+
+from sklearn.metrics import accuracy_score, classification_report
+print("Accuracy:", accuracy_score(y_test, y_pred))
+print("\nClassification Report:\n", classification_report(y_test, y_pred))
+
+## Model Evaluation
+The model performance is evaluated using accuracy and classification report.
+Accuracy represents the percentage of correct predictions made by the model.
+The classification report provides precision, recall, and F1-score.
+
+# Predicting result for a new student
+new_student = [[6, 85, 70]]  # Study_Hours, Attendance, Previous_Score
+prediction = model.predict(new_student)
+print("Prediction:", "Pass" if prediction[0] == 1 else "Fail")
+
+# Predicting result for a new student (without warning)
+new_student = pd.DataFrame(
+    [[6, 85, 70]],
+    columns=['Study_Hours', 'Attendance', 'Previous_Score']
+)
+
+prediction = model.predict(new_student)
+print("Prediction:", "Pass" if prediction[0] == 1 else "Fail")
+
+## Conclusion
+This project successfully demonstrates a complete machine learning pipeline
+including dataset creation, feature selection, model training, and evaluation.
+The Logistic Regression model effectively predicts student performance.
+
+## Prediction Output
+For a new student with 6 study hours, 85% attendance, and a previous score of 70,
+the model predicts that the student will Pass.
